@@ -11,7 +11,7 @@ class ErrorIdentifier:
         self.ground_truth_list = ground_truth_list
         predicted = [ent for ent in self.doc.ents if ent.label_ in labels]
         self.predicted_entities = predicted
-        [self.match_string_to_doc_obj(idx, ent) for idx, ent in enumerate(self.ground_truth_list)]
+        for idx, ent in enumerate(self.ground_truth_list): self.match_string_to_doc_obj(idx, ent)
         self.matches = self.matcher(self.doc)
         self.ground_truth_entities = self.create_gs_spans_for_matches()
 
@@ -25,11 +25,7 @@ class ErrorIdentifier:
         self.matcher.add(f"ENTITY_{idx}", [tok_patterns])
 
     def create_gs_spans_for_matches(self):
-        spans = []
-        for _, start, end in self.matches:
-            span_obj = Span(self.doc, start, end, label="GOLD")
-            spans.append(span_obj)
-        return spans
+        return [Span(self.doc, start, end, label="GOLD") for _, start, end in self.matches]
 
 
     def log_concat_error(self, doc_ent, ent):
