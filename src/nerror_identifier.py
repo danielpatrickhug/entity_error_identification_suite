@@ -84,5 +84,6 @@ class ErrorIdentifier:
                     pass
 
     def identify_errors(self):
+        print("\n\n")
         self.add_ground_truth_to_doc(self.ground_truth_entities)
         print('_____________________\n')

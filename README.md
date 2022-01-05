@@ -2,10 +2,12 @@
 
 - This is a Module for detecting concatenation errors for spacy pipeline NER predictions given gold standard entities.
 - Module based of NERror: https://github.com/HindsightTechnologySolutions/NERror
-- Currently this solution is a bit hacky and only detects concatenation errors.
+- Currently this solution is a bit hacky and only detects concatenation, and fragmentation errors.
+- Use en_core_web_md to see frag errors
 - TODO:
-    - add fragmentation error detections.
-    - add disambiguation error detections.
+    - add granular concatenation error detection.
+    - add granular fragmentation error detection.
+    - add disambiguation error detection.
     - add an error logger to file
 
 ```bash
