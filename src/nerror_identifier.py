@@ -20,10 +20,6 @@ class ErrorIdentifier:
         for char in char_tuple:
             ent = ent.replace(char[0], char[1])
         tok_patterns = [{'TEXT': tok} for tok in ent.split()]
-        '''
-        for tok in ent.split():
-            tok_patterns.append({'TEXT': tok})
-        '''
         self.matcher.add(f"ENTITY_{idx}", [tok_patterns])
 
     def create_gs_spans_for_matches(self):
