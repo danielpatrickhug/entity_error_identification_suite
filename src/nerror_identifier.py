@@ -42,6 +42,7 @@ class ErrorIdentifier:
                     try:
                         self.doc.ents = list(self.doc.ents)+[ent]
                     except Exception as e:
+                        #Look for colliding entities
                         print("Unhandled exception: ", ent.text, ent.start, ent.end)
 
 
