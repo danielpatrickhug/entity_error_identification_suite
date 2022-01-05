@@ -1,6 +1,3 @@
-import pandas as pd
-import numpy as np
-import re
 from spacy.tokens import Span
 from spacy.matcher import Matcher
 
@@ -13,23 +10,13 @@ class ErrorIdentifier:
         self.labels = labels
         self.ground_truth_list = ground_truth_list
         self.predicted_entities = [ent for ent in self.doc.ents if ent.label_ in labels]
-        self.ground_truth_entities = self.create_entity_span_objects(self.ground_truth_list)
+        [self.match_string_to_doc_obj(idx, ent) for idx, ent in enumerate(self.ground_truth_list)]
+        self.matches = self.matcher(self.doc)
+        self.ground_truth_entities = self.create_spans_for_matches()
 
 
-    '''
-    input: list of ground truth entity strings
-    output: list of span objects for the ground truth entities in self.doc
-    '''
-    def create_entity_span_objects(self, ground_truth_list):
-        return self.match_entity_span_objects(ground_truth_list)
 
-    def match_entity_span_objects(self,entities):
-        for idx, ent in enumerate(entities):
-            self.match_entity_pattern(idx, ent)
-        matches = self.matcher(self.doc)
-        return self.create_spans_for_matches(matches)
-
-    def match_entity_pattern(self, idx, ent):
+    def match_string_to_doc_obj(self, idx, ent: str):
         char_tuple = [(",", " , "), ("-", " - "), ("'", " '"), (".", " . ")]
         for char in char_tuple:
             ent = ent.replace(char[0], char[1])
@@ -38,9 +25,10 @@ class ErrorIdentifier:
             tok_patterns.append({'TEXT': tok})
         self.matcher.add(f"ENTITY_{idx}", [tok_patterns])
 
-    def create_spans_for_matches(self, matches):
+
+    def create_spans_for_matches(self):
         spans = []
-        for _, start, end in matches:
+        for _, start, end in self.matches:
             span_obj = Span(self.doc, start, end, label="GOLD")
             spans.append(span_obj)
         return spans
@@ -73,7 +61,7 @@ class ErrorIdentifier:
                         self.doc.ents = list(self.doc.ents)+[ent]
                     except Exception as e:
                         #Look for colliding entities
-                        print("Unhandled exception: ", ent.text, ent.start, ent.end)
+                        print(f"Unhandled exception: {e}\n {ent.text} {ent.start} {ent.end}")
 
 
     def identify_errors(self):
