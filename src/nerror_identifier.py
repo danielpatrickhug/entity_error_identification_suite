@@ -14,8 +14,6 @@ class ErrorIdentifier:
 
     def identify_errors(self):
         print("\n\n")
-        #self.log_ner_errors(self.ground_truth_entities)
-        logger = ErrorLogger(self.doc)
-        logger.log_ner_errors(self.ground_truth_entities)
-        print('_____________________\n')
+        ErrorLogger(self.doc).log_ner_errors(self.ground_truth_entities)
+        print('\n\n')
 
