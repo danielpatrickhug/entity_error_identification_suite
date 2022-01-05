@@ -9,7 +9,8 @@ class ErrorIdentifier:
         self.matcher = Matcher(self.vocab)
         self.labels = labels
         self.ground_truth_list = ground_truth_list
-        self.predicted_entities = [ent for ent in self.doc.ents if ent.label_ in labels]
+        predicted = [ent for ent in self.doc.ents if ent.label_ in labels]
+        self.predicted_entities = predicted
         [self.match_string_to_doc_obj(idx, ent) for idx, ent in enumerate(self.ground_truth_list)]
         self.matches = self.matcher(self.doc)
         self.ground_truth_entities = self.create_gs_spans_for_matches()
@@ -30,13 +31,14 @@ class ErrorIdentifier:
             spans.append(span_obj)
         return spans
 
+
     def log_concat_error(self, doc_ent, ent):
         print(f"Concatenation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
 
     def log_frag_error(self, doc_ent, ent):
         print(f"Fragmentation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
 
-    def add_ground_truth_to_doc(self, ground_truth_spans: list):
+    def log_ner_errors(self, ground_truth_spans: list):
         break_loop = False
         for idx, ent in enumerate(ground_truth_spans):
             for doc_ent in self.doc.ents:
@@ -76,14 +78,18 @@ class ErrorIdentifier:
                 break_loop = False
                 continue
             else:
-                try:
-                    self.doc.ents = list(self.doc.ents)+[ent]
-                except Exception as e:
-                    #Look for colliding entities
-                    #print(f"Unhandled exception: {doc_ent.text} - {ent.text}")
-                    pass
+                self.add_entity_to_doc(ent)
+
+
+    def add_entity_to_doc(self, ent):
+        try:
+            self.doc.ents = list(self.doc.ents)+[ent]
+        except Exception as e:
+            #Look for colliding entities
+            #print(f"Unhandled exception: {doc_ent.text} - {ent.text}")
+            pass
 
     def identify_errors(self):
         print("\n\n")
-        self.add_ground_truth_to_doc(self.ground_truth_entities)
+        self.log_ner_errors(self.ground_truth_entities)
         print('_____________________\n')
