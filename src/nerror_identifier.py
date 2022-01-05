@@ -34,6 +34,10 @@ class ErrorIdentifier:
         return spans
 
 
+    def log_concat_error(self, doc_ent, ent):
+        print(f"Concatenation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
+
+
     def add_ground_truth_to_doc(self, ground_truth_spans):
             for idx, ent in enumerate(ground_truth_spans):
                 for doc_ent in self.doc.ents:
@@ -42,15 +46,15 @@ class ErrorIdentifier:
                         break_loop = True
                         break
                     elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end:
-                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end}- is a concatenation of ground truth - {self.doc[ent.start:ent.end]}  {ent.start} {ent.end}")
+                        self.log_concat_error(doc_ent, ent)
                         break_loop = True
                         break
                     elif doc_ent.start == ent.start and doc_ent.end == ent.end+1:
-                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end}- is a concatenation of ground truth - {self.doc[ent.start:ent.end]} {ent.start} {ent.end}")
+                        self.log_concat_error(doc_ent, ent)
                         break_loop = True
                         break
                     elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end+1:
-                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end} - is a concatenation of ground truth - {self.doc[ent.start:ent.end]}  {ent.start} {ent.end}")
+                        self.log_concat_error(doc_ent, ent)
                         break_loop = True
                         break
                 if break_loop:
