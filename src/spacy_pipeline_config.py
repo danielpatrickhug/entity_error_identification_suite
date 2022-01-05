@@ -12,14 +12,14 @@ class PipelineConfig:
         return self.vocab
 
     def get_stop_words(self):
-        with open("../data/stoplist.txt", "r") as a_file:
+        with open("./data/stoplist.txt", "r") as a_file:
             for line in a_file:
                 self.stop_words = []
                 self.stop_words.append(line)
         return self.stop_words
 
     def get_conj_advs(self):
-        with open("../data/conj_advs.txt", "r") as a_file:
+        with open("./data/conj_advs.txt", "r") as a_file:
             for line in a_file:
                 self.conj_advs = []
                 self.conj_advs.append(line)

@@ -8,7 +8,8 @@ vocab = config.get_voab()
 processor = DataPreProcessor("./data/test.json", "index")
 df = processor.get_dataframe()
 labels = ["PERSON", "ORG", "GPE", "LOC", "PRODUCT", "EVENT", "WORK_OF_ART"]
-
+#stop_words = config.get_stop_words()
+#conj_advs = config.get_conj_advs()
 
 for index, row in df.iterrows():
     doc = nlp(row["text"])
