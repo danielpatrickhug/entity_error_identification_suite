@@ -1,29 +1,16 @@
-from spacy.tokens import Span
-from spacy.matcher import Matcher
+from src.spacy_pipeline_config import SpanMatcher
 
 class ErrorIdentifier:
     def __init__(self, text_id, doc, ground_truth_list, vocab, labels):
         self.doc = doc
         self.vocab = vocab
         self.text_id = text_id
-        self.matcher = Matcher(self.vocab)
         self.labels = labels
         self.ground_truth_list = ground_truth_list
         predicted = [ent for ent in self.doc.ents if ent.label_ in labels]
         self.predicted_entities = predicted
-        for idx, ent in enumerate(self.ground_truth_list): self.match_string_to_doc_obj(idx, ent)
-        self.matches = self.matcher(self.doc)
-        self.ground_truth_entities = self.create_gs_spans_for_matches()
-
-    def match_string_to_doc_obj(self, idx: int, ent: str):
-        char_tuple = [(",", " , "), ("-", " - "), ("'", " '"), (".", " . ")]
-        for char in char_tuple:
-            ent = ent.replace(char[0], char[1])
-        tok_patterns = [{'TEXT': tok} for tok in ent.split()]
-        self.matcher.add(f"ENTITY_{idx}", [tok_patterns])
-
-    def create_gs_spans_for_matches(self):
-        return [Span(self.doc, start, end, label="GOLD") for _, start, end in self.matches]
+        matcher = SpanMatcher(self.doc, self.vocab, ground_truth_list, 'GOLD')
+        self.ground_truth_entities = matcher.get_span_objects()
 
     def log_concat_error(self, doc_ent, ent):
         print(f"Concatenation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
@@ -86,3 +73,4 @@ class ErrorIdentifier:
         print("\n\n")
         self.log_ner_errors(self.ground_truth_entities)
         print('_____________________\n')
+
