@@ -16,36 +16,6 @@ class ErrorIdentifier:
         self.ground_truth_entities = self.create_entity_span_objects(self.ground_truth_list)
 
 
-    def add_ground_truth_to_doc(self, ground_truth_spans):
-            for idx, ent in enumerate(ground_truth_spans):
-                for doc_ent in self.doc.ents:
-                    if doc_ent.start == ent.start and doc_ent.end == ent.end:
-                        #print(f'Ground Truth: {ent} already in doc')
-                        break_loop = True
-                        break
-                    elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end:
-                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end}- is a concatenation of ground truth - {self.doc[ent.start:ent.end]}  {ent.start} {ent.end}")
-                        break_loop = True
-                        break
-                    elif doc_ent.start == ent.start and doc_ent.end == ent.end+1:
-                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end}- is a concatenation of ground truth - {self.doc[ent.start:ent.end]} {ent.start} {ent.end}")
-                        break_loop = True
-                        break
-                    elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end+1:
-                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end} - is a concatenation of ground truth - {self.doc[ent.start:ent.end]}  {ent.start} {ent.end}")
-                        break_loop = True
-                        break
-                if break_loop:
-                    break_loop = False
-                    continue
-                else:
-                    try:
-                        self.doc.ents = list(self.doc.ents)+[ent]
-                    except Exception as e:
-                        #Look for colliding entities
-                        print("Unhandled exception: ", ent.text, ent.start, ent.end)
-
-
     '''
     input: list of ground truth entity strings
     output: list of span objects for the ground truth entities in self.doc
@@ -74,6 +44,36 @@ class ErrorIdentifier:
             span_obj = Span(self.doc, start, end, label="GOLD")
             spans.append(span_obj)
         return spans
+
+
+    def add_ground_truth_to_doc(self, ground_truth_spans):
+            for idx, ent in enumerate(ground_truth_spans):
+                for doc_ent in self.doc.ents:
+                    if doc_ent.start == ent.start and doc_ent.end == ent.end:
+                        #print(f'Ground Truth: {ent} already in doc')
+                        break_loop = True
+                        break
+                    elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end:
+                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end}- is a concatenation of ground truth - {self.doc[ent.start:ent.end]}  {ent.start} {ent.end}")
+                        break_loop = True
+                        break
+                    elif doc_ent.start == ent.start and doc_ent.end == ent.end+1:
+                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end}- is a concatenation of ground truth - {self.doc[ent.start:ent.end]} {ent.start} {ent.end}")
+                        break_loop = True
+                        break
+                    elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end+1:
+                        print(f"Prediction: {self.doc[doc_ent.start:doc_ent.end]} {doc_ent.start} {doc_ent.end} - is a concatenation of ground truth - {self.doc[ent.start:ent.end]}  {ent.start} {ent.end}")
+                        break_loop = True
+                        break
+                if break_loop:
+                    break_loop = False
+                    continue
+                else:
+                    try:
+                        self.doc.ents = list(self.doc.ents)+[ent]
+                    except Exception as e:
+                        #Look for colliding entities
+                        print("Unhandled exception: ", ent.text, ent.start, ent.end)
 
 
     def identify_errors(self):
