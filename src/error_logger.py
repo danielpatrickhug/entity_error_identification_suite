@@ -3,13 +3,14 @@
 class ErrorLogger:
     def __init__(self, doc):
         self.doc = doc
-
+    #TODO Log to tsv
     def log_concat_error(self, doc_ent, ent) -> None:
         print(f"Concatenation Error\t{self.doc[doc_ent.start:doc_ent.end]}\t{self.doc[ent.start:ent.end]}")
 
     def log_frag_error(self, doc_ent, ent) -> None:
         print(f"Fragmentation Error\t{self.doc[doc_ent.start:doc_ent.end]}\t{self.doc[ent.start:ent.end]}")
-
+    #TODO break into separate classes(FragmentError, ConcatenationError)
+    #TODO add disambiguation error and create error class
     def log_ner_errors(self, ground_truth_spans: list) -> None:
         break_loop = False
         for idx, ent in enumerate(ground_truth_spans):
