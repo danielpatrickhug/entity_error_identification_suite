@@ -9,7 +9,7 @@ class PipelineConfig:
     def get_nlp(self):
         return self.nlp
 
-    def get_voab(self):
+    def get_vocab(self):
         return self.vocab
 
     def get_stop_words(self):

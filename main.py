@@ -14,4 +14,4 @@ df = DataPreProcessor(args.data_path, "index").get_dataframe()
 labels = ["PERSON", "ORG", "GPE", "LOC", "PRODUCT", "EVENT", "WORK_OF_ART"]
 
 df.apply(lambda x: ErrorIdentifier(nlp(x["text"]), list(x["ground_truth_entities_list"]),
-                                   config.get_voab(), labels).identify_errors(), axis=1)
+                                   config.get_vocab(), labels).identify_errors(), axis=1)
