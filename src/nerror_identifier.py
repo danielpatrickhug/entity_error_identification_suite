@@ -6,7 +6,6 @@ class ErrorIdentifier:
         self.doc = doc
         self.vocab = vocab
         self.labels = labels
-        self.ground_truth_list = ground_truth_list
         predicted = [ent for ent in self.doc.ents if ent.label_ in labels]
         self.predicted_entities = predicted
         matcher = SpanMatcher(self.doc, self.vocab, ground_truth_list, 'GOLD')
