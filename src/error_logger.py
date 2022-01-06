@@ -1,13 +1,17 @@
 #from src.logger_utils import add_entity_to_doc
 
+from spacy.tokens.span import Span
+
+
 class ErrorLogger:
-    def __init__(self, doc):
+    def __init__(self, doc: object) -> None:
         self.doc = doc
+
     #TODO Log to tsv
-    def log_concat_error(self, doc_ent, ent) -> None:
+    def log_concat_error(self, doc_ent: Span, ent: Span) -> None:
         print(f"Concatenation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
 
-    def log_frag_error(self, doc_ent, ent) -> None:
+    def log_frag_error(self, doc_ent: Span, ent: Span) -> None:
         print(f"Fragmentation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
 
     #TODO break into separate classes(FragmentError, ConcatenationError)

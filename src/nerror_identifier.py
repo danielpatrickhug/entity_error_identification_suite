@@ -2,7 +2,7 @@ from src.span_matcher import SpanMatcher
 from src.error_logger import ErrorLogger
 
 class ErrorIdentifier:
-    def __init__(self, doc, ground_truth_list, vocab, labels):
+    def __init__(self, doc: object, ground_truth_list: list, vocab: object, labels: list) -> None:
         self.doc = doc
         self.vocab = vocab
         self.labels = labels
