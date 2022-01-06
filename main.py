@@ -3,6 +3,7 @@ from src.data_preprocessor import DataPreProcessor
 from src.nerror_identifier import ErrorIdentifier
 import argparse
 
+#TODO convert to config parser
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_name", type=str, default="en_core_web_trf")
 parser.add_argument("--data_path", type=str, default="./data/test.json")
