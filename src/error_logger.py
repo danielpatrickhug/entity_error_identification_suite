@@ -7,7 +7,6 @@ class ErrorLogger:
     def log_concat_error(self, doc_ent, ent):
         print(f"Concatenation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
 
-
     def log_frag_error(self, doc_ent, ent):
         print(f"Fragmentation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
 
