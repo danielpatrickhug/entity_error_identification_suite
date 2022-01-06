@@ -2,7 +2,7 @@ from spacy.tokens import Span
 from spacy.matcher import Matcher
 
 class SpanMatcher:
-    def __init__(self, doc, vocab, entity_list, label):
+    def __init__(self, doc: object, vocab: object, entity_list: list, label: str) -> None:
         self.doc = doc
         self.vocab = vocab
         self.matcher = Matcher(self.vocab)
