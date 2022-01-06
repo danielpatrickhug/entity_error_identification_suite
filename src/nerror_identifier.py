@@ -11,7 +11,7 @@ class ErrorIdentifier:
         matcher = SpanMatcher(self.doc, self.vocab, ground_truth_list, 'GOLD')
         self.ground_truth_entities = matcher.get_span_objects()
 
-    def identify_errors(self):
+    def identify_errors(self) -> None:
         print("\n\n")
         ErrorLogger(self.doc).log_ner_errors(self.ground_truth_entities)
         print('\n\n')

@@ -4,13 +4,13 @@ class ErrorLogger:
     def __init__(self, doc):
         self.doc = doc
 
-    def log_concat_error(self, doc_ent, ent):
+    def log_concat_error(self, doc_ent, ent) -> None:
         print(f"Concatenation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
 
-    def log_frag_error(self, doc_ent, ent):
+    def log_frag_error(self, doc_ent, ent) -> None:
         print(f"Fragmentation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
 
-    def log_ner_errors(self, ground_truth_spans: list):
+    def log_ner_errors(self, ground_truth_spans: list) -> None:
         break_loop = False
         for idx, ent in enumerate(ground_truth_spans):
             for doc_ent in self.doc.ents:
