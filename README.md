@@ -1,7 +1,7 @@
 # Entity Error Identification Suite
 
 - This is a Module for detecting concatenation and fragmentation errors for spacy pipeline NER predictions given gold standard entities.
-- Module based of NERror: https://github.com/HindsightTechnologySolutions/NERror
+- Module based off NERror: https://github.com/HindsightTechnologySolutions/NERror
 - Use en_core_web_md to see frag errors for test data
 - TODO:
     - add granular concatenation error detection and logging.
