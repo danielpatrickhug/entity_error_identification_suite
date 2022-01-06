@@ -9,15 +9,15 @@ class ErrorLogger:
 
     def log_frag_error(self, doc_ent, ent):
         print(f"Fragmentation Error: {self.doc[doc_ent.start:doc_ent.end]} - {self.doc[ent.start:ent.end]}")
-
-    def add_entity_to_doc(self, ent):
+    '''
+    def add_entity_to_doc(doc, ent):
         try:
-            self.doc.ents = list(self.doc.ents)+[ent]
+            doc.ents = list(doc.ents)+[ent]
         except Exception as e:
             #Look for colliding entities
-            #print(f"Unhandled exception: {doc_ent.text} - {ent.text}")
+            #print(f"Unhandled exception: {ent.text}")
             pass
-
+    '''
     def log_ner_errors(self, ground_truth_spans: list):
         break_loop = False
         for idx, ent in enumerate(ground_truth_spans):

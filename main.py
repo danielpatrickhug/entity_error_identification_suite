@@ -11,4 +11,5 @@ labels = ["PERSON", "ORG", "GPE", "LOC", "PRODUCT", "EVENT", "WORK_OF_ART"]
 #stop_words = config.get_stop_words()
 #conj_advs = config.get_conj_advs()
 
-df.apply(lambda x: ErrorIdentifier(nlp(x["text"]), list(x["ground_truth_entities_list"]), vocab, labels).identify_errors(), axis=1)
+df.apply(lambda x: ErrorIdentifier(nlp(x["text"]), list(x["ground_truth_entities_list"]),
+                                   config.get_voab(), labels).identify_errors(), axis=1)
