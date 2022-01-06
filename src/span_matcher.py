@@ -12,8 +12,8 @@ class SpanMatcher:
         self.matches = self.matcher(self.doc)
 
     def match_string_to_doc_obj(self, idx: int, ent: str) -> None:
-        char_tuple = [(",", " , "), ("-", " - "), ("'", " '"), (".", " . ")]
-        for char_pair in char_tuple: ent = ent.replace(char_pair[0], char_pair[1])
+        char_tuple_list = [(",", " , "), ("-", " - "), ("'", " '"), (".", " . ")]
+        for char_tuple in char_tuple_list: ent = ent.replace(char_tuple[0], char_tuple[1])
         tok_patterns = [{'TEXT': tok} for tok in ent.split()]
         self.matcher.add(f"ENTITY_{idx}", [tok_patterns])
 
