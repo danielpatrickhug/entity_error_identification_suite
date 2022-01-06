@@ -6,9 +6,7 @@ class ErrorIdentifier:
         self.doc = doc
         self.vocab = vocab
         self.labels = labels
-        predicted = [ent for ent in self.doc.ents if ent.label_ in labels]
-        self.predicted_entities = predicted
-        self.doc.ents = predicted
+        self.doc.ents = [ent for ent in self.doc.ents if ent.label_ in labels]
         matcher = SpanMatcher(self.doc, self.vocab, ground_truth_list, 'GOLD')
         self.ground_truth_entities = matcher.get_span_objects()
 
