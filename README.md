@@ -2,16 +2,14 @@
 
 - This is a Module for detecting concatenation and fragmentation errors for spacy pipeline NER predictions given gold standard entities.
 - Module based of NERror: https://github.com/HindsightTechnologySolutions/NERror
-- Currently this solution is a bit hacky and only detects concatenation, and fragmentation errors.
-- Use en_core_web_md to see frag errors
+- Use en_core_web_md to see frag errors for test data
 - TODO:
-    - add granular concatenation error detection.
-    - add granular fragmentation error detection.
-    - add disambiguation error detection.
-    - add an error logger to file
+    - add granular concatenation error detection and logging.
+    - add granular fragmentation error detection and logging.
+    - add disambiguation error detection and logging.
 
 ```bash
 python3.9 -m venv venv && source venv/bin/activate && pip install -U pip setuptools wheel
 pip install -r requirements.txt
-python main.py
+python main.py --model_name en_core_web_trf --data_path ./data/test.json
 ```
