@@ -19,7 +19,8 @@ class ErrorLogger:
     def log_ner_errors(self, ground_truth_spans: list) -> None:
         break_loop = False
         for idx, ent in enumerate(ground_truth_spans):
-            for doc_ent in self.doc.ents:
+            overlapping_spans= [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
+            for doc_ent in overlapping_spans:
                 if doc_ent.start == ent.start and doc_ent.end == ent.end:
                     #print(f'Ground Truth: {ent} already in doc')
                     break_loop = True
