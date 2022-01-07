@@ -1,4 +1,4 @@
-# Entity Error Identification Suite
+# Entity NERror Identification Suite
 
 - This is a Module for detecting concatenation, fragmentation and disambiguation errors for spacy pipeline NER predictions given gold standard entities.
 - Module based off NERror: https://github.com/HindsightTechnologySolutions/NERror
