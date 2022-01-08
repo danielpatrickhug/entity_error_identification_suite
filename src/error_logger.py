@@ -8,8 +8,8 @@ class ErrorLogger:
         self.doc = doc
 
     #TODO Log to tsv
-    def log_correct_prediction(self, doc_ent: Span, ent: Span) -> None:
-        print(f"Correct Entity Prediction \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
+    def log_general(self, prediction_type, doc_ent: Span, ent: Span) -> None:
+        print(f"{prediction_type} Entity Prediction \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
 
     def log_concat_error(self, concat_type, doc_ent: Span, ent: Span) -> None:
         print(f"{concat_type} Concatenation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
@@ -22,10 +22,10 @@ class ErrorLogger:
     def log_ner_errors(self, ground_truth_spans: list) -> None:
         break_loop = False
         for idx, ent in enumerate(ground_truth_spans):
-            overlapping_spans= [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
+            overlapping_spans = [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
             for doc_ent in overlapping_spans:
                 if doc_ent.start == ent.start and doc_ent.end == ent.end:
-                    self.log_correct_prediction(doc_ent, ent) 
+                    self.log_general("Correct", doc_ent, ent)
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end:
