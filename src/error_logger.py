@@ -25,7 +25,7 @@ class ErrorLogger:
             overlapping_spans= [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
             for doc_ent in overlapping_spans:
                 if doc_ent.start == ent.start and doc_ent.end == ent.end:
-                    self.log_correct_prediction(doc_ent, ent) # Lack of symmetry in console is ugly
+                    self.log_correct_prediction(doc_ent, ent) 
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end:
