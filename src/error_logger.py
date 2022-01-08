@@ -8,11 +8,11 @@ class ErrorLogger:
         self.doc = doc
 
     #TODO Log to tsv
-    def log_concat_error(self, doc_ent: Span, ent: Span) -> None:
-        print(f"Concatenation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
+    def log_concat_error(self, concat_type, doc_ent: Span, ent: Span) -> None:
+        print(f"{concat_type} Concatenation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
 
-    def log_frag_error(self, doc_ent: Span, ent: Span) -> None:
-        print(f"Fragmentation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
+    def log_frag_error(self, frag_type, doc_ent: Span, ent: Span) -> None:
+        print(f"{frag_type} Fragmentation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
 
     #TODO break into separate classes(FragmentError, ConcatenationError)
     #TODO add DisambiguationError logger and create error class
@@ -26,31 +26,31 @@ class ErrorLogger:
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end:
-                    self.log_concat_error(doc_ent, ent)
+                    self.log_concat_error("Start", doc_ent, ent)
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start and doc_ent.end == ent.end+1:
-                    self.log_concat_error(doc_ent, ent)
+                    self.log_concat_error("End", doc_ent, ent)
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end+1:
-                    self.log_concat_error(doc_ent, ent)
+                    self.log_concat_error("Bilateral", doc_ent, ent)
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start and doc_ent.end == ent.end-1 :
-                    self.log_frag_error(doc_ent, ent)
+                    self.log_frag_error("End", doc_ent, ent)
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end-1 and len(doc_ent) != 1:
-                    self.log_frag_error(doc_ent, ent)
+                    self.log_frag_error("Shift Left", doc_ent, ent)
                     break_loop = True
                     break
                 elif doc_ent.start == ent.start+1 and doc_ent.end == ent.end+1:
-                    self.log_frag_error(doc_ent, ent)
+                    self.log_frag_error("Shift Right", doc_ent, ent)
                     break_loop = True
                     break
-                elif doc_ent.start == ent.start+1 and doc_ent.end == ent.end-1:
-                    self.log_frag_error(doc_ent, ent)
+                elif doc_ent.start == ent.start+1 and doc_ent.end == ent.end-1 and len(doc_ent) != 1:
+                    self.log_frag_error("Contract", doc_ent, ent)
                     break_loop = True
                     break
             if break_loop:
