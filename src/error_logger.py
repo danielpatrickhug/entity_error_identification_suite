@@ -6,7 +6,7 @@ class ErrorLogger:
         self.doc = doc
         # Tuple: (error_label, start_offset, end_offset, check_singleton_flag)
         self.error_types = [("Correct Entity Prediction", 0, 0, 0),("Start Concatenation Error", -1, 0, 0), ("End Concatenation Error", 0, 1, 0),
-                       ("Bilateral Concatenation Error", -1, 1, 0), ("Shift Left Fragmentation Error", -1, 1, 1), ("End Fragmentation Error", 0, -1, 0),
+                       ("Bilateral Concatenation Error", -1, 1, 0), ("Shift Left Fragmentation Error", -1, -1, 1), ("End Fragmentation Error", 0, -1, 0),
                         ("Shift Right Fragmentation Error", 1, 1, 1), ("Bilateral Fragmentation Error", 1, -1, 1), ("Start Fragmentation Error", 1, 0, 0)
                         , ("Start Fragmentation Error", 2, 0, 0)]
 
@@ -20,7 +20,7 @@ class ErrorLogger:
     def check_entity_pair(self, doc_ent: Span, ent: Span, start_offset, end_offset, singleton_flag) -> bool:
         if singleton_flag == 1:
             #print(f"Checking for error: {doc_ent} \t {ent}")
-            return doc_ent.start == ent.start+start_offset and doc_ent.end == ent.end+end_offset# and self.is_not_singleton(doc_ent)
+            return doc_ent.start == ent.start+start_offset and doc_ent.end == ent.end+end_offset and self.is_not_singleton(doc_ent)
         else:
             return doc_ent.start == ent.start+start_offset and doc_ent.end == ent.end+end_offset
 
