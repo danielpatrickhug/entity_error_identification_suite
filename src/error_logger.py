@@ -5,66 +5,16 @@ class ErrorLogger:
     def __init__(self, doc: object) -> None:
         self.doc = doc
         self.error_types= [
-            {
-            "Error Name": "Correct Entity Prediction",
-            "Start Offset": 0,
-            "End Offset": 0,
-            "Singleton Flag": 0
-            },
-            {
-            "Error Name": "Start Concatenation Error",
-            "Start Offset": -1,
-            "End Offset": 0,
-            "Singleton Flag": 0
-            },
-            {
-            "Error Name": "End Concatenation Error",
-            "Start Offset": 0,
-            "End Offset": 1,
-            "Singleton Flag": 0
-            },
-            {
-            "Error Name": "Bilateral Concatenation Error",
-            "Start Offset": -1,
-            "End Offset": 1,
-            "Singleton Flag": 0
-            },
-            {
-            "Error Name": "Shift Left Fragmentation Error",
-            "Start Offset": -1,
-            "End Offset": -1,
-            "Singleton Flag": 1
-            },
-            {
-            "Error Name": "End Fragmentation Error",
-            "Start Offset": 0,
-            "End Offset": -1,
-            "Singleton Flag": 0
-            },
-            {
-            "Error Name": "Shift Right Fragmentation Error",
-            "Start Offset": 1,
-            "End Offset": 1,
-            "Singleton Flag": 1
-            },
-            {
-            "Error Name": "Bilateral Fragmentation Error",
-            "Start Offset": 1,
-            "End Offset": -1,
-            "Singleton Flag": 1
-            },
-            {
-            "Error Name": "Start Fragmentation Error",
-            "Start Offset": 1,
-            "End Offset": 0,
-            "Singleton Flag": 0
-            },
-            {
-            "Error Name": "Start Fragmentation Error",
-            "Start Offset": 2,
-            "End Offset": 0,
-            "Singleton Flag": 0
-            }]
+            {"Error Name": "Correct Entity Prediction", "Start Offset": 0, "End Offset": 0, "Singleton Flag": 0},
+            {"Error Name": "Start Concatenation Error", "Start Offset": -1, "End Offset": 0, "Singleton Flag": 0},
+            {"Error Name": "End Concatenation Error", "Start Offset": 0, "End Offset": 1, "Singleton Flag": 0},
+            {"Error Name": "Bilateral Concatenation Error", "Start Offset": -1, "End Offset": 1, "Singleton Flag": 0},
+            {"Error Name": "Shift Left Fragmentation Error", "Start Offset": -1, "End Offset": -1, "Singleton Flag": 1},
+            {"Error Name": "End Fragmentation Error", "Start Offset": 0, "End Offset": -1, "Singleton Flag": 0},
+            {"Error Name": "Shift Right Fragmentation Error", "Start Offset": 1, "End Offset": 1, "Singleton Flag": 1},
+            {"Error Name": "Bilateral Fragmentation Error", "Start Offset": 1, "End Offset": -1, "Singleton Flag": 1},
+            {"Error Name": "Start Fragmentation Error", "Start Offset": 1, "End Offset": 0, "Singleton Flag": 0},
+            {"Error Name": "Start Fragmentation Error", "Start Offset": 2, "End Offset": 0, "Singleton Flag": 0}]
 
     #TODO Log to tsv
     def log_general(self, prediction_type: str, doc_ent: Span, ent: Span) -> None:
