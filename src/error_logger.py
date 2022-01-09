@@ -1,6 +1,5 @@
 from spacy.tokens.span import Span
 
-
 class ErrorLogger:
     def __init__(self, doc: object) -> None:
         self.doc = doc
@@ -23,6 +22,9 @@ class ErrorLogger:
     def is_not_singleton(self, ent: Span) -> bool:
         return len(ent) != 1
 
+    def get_overlapping_entities(self, ent: Span) -> list:
+        return [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
+
     def check_entity_pair(self, doc_ent: Span, ent: Span, error_dict) -> bool:
         if error_dict["Singleton Flag"] == 1:
             if doc_ent.start == ent.start+error_dict["Start Offset"] and doc_ent.end == ent.end+error_dict["End Offset"] and self.is_not_singleton(doc_ent):
@@ -33,11 +35,6 @@ class ErrorLogger:
                 self.log_general(error_dict["Error Name"], doc_ent, ent)
                 return True
 
-    def get_overlapping_entities(self, ent: Span) -> list:
-        return [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
-
-    #TODO break into separate classes(FragmentError, ConcatenationError)
-    #TODO add DisambiguationError logger and create error class
     def log_ner_errors(self, ground_truth_spans: list) -> None:
         for idx, ent in enumerate(ground_truth_spans):
             for doc_ent in self.get_overlapping_entities(ent):
