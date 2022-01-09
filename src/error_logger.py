@@ -17,12 +17,15 @@ class ErrorLogger:
     def is_not_singleton(self, ent: Span) -> bool:
         return len(ent) != 1
 
-    def check_entity_pair(self, doc_ent: Span, ent: Span, start_offset, end_offset, singleton_flag) -> bool:
-        if singleton_flag == 1:
-            #print(f"Checking for error: {doc_ent} \t {ent}")
-            return doc_ent.start == ent.start+start_offset and doc_ent.end == ent.end+end_offset and self.is_not_singleton(doc_ent)
+    def check_entity_pair(self, doc_ent: Span, ent: Span, error_tuple) -> bool:
+        if error_tuple[3] == 1:
+            if doc_ent.start == ent.start+error_tuple[1] and doc_ent.end == ent.end+error_tuple[2] and self.is_not_singleton(doc_ent):
+                self.log_general(error_tuple[0], doc_ent, ent)
+                return True
         else:
-            return doc_ent.start == ent.start+start_offset and doc_ent.end == ent.end+end_offset
+            if doc_ent.start == ent.start+error_tuple[1] and doc_ent.end == ent.end+error_tuple[2]:
+                self.log_general(error_tuple[0], doc_ent, ent)
+                return True
 
     def get_overlapping_entities(self, ent: Span) -> list:
         return [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
@@ -30,15 +33,10 @@ class ErrorLogger:
     #TODO break into separate classes(FragmentError, ConcatenationError)
     #TODO add DisambiguationError logger and create error class
     def log_ner_errors(self, ground_truth_spans: list) -> None:
-        break_loop = False
         for idx, ent in enumerate(ground_truth_spans):
             for doc_ent in self.get_overlapping_entities(ent):
                 for error_type in self.error_types:
-                    break_loop = False
-                    if self.check_entity_pair(doc_ent, ent, error_type[1], error_type[2], error_type[3]):
-                        #print("Checking for error type: ", error_type[0])
-                        self.log_general(error_type[0], doc_ent, ent)
-                        break_loop = True
+                    if self.check_entity_pair(doc_ent, ent, error_type):
                         break
 
 
