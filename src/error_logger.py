@@ -39,7 +39,7 @@ class ErrorLogger:
             "Error Name": "End Fragmentation Error",
             "Start Offset": 0,
             "End Offset": -1,
-            "Singleton Flag": 1
+            "Singleton Flag": 0
             },
             {
             "Error Name": "Shift Right Fragmentation Error",
@@ -57,13 +57,13 @@ class ErrorLogger:
             "Error Name": "Start Fragmentation Error",
             "Start Offset": 1,
             "End Offset": 0,
-            "Singleton Flag": 1
+            "Singleton Flag": 0
             },
             {
             "Error Name": "Start Fragmentation Error",
             "Start Offset": 2,
             "End Offset": 0,
-            "Singleton Flag": 1
+            "Singleton Flag": 0
             }]
 
     #TODO Log to tsv
