@@ -4,11 +4,67 @@ from spacy.tokens.span import Span
 class ErrorLogger:
     def __init__(self, doc: object) -> None:
         self.doc = doc
-        # Tuple: (error_label, start_offset, end_offset, check_singleton_flag)
-        self.error_types = [("Correct Entity Prediction", 0, 0, 0),("Start Concatenation Error", -1, 0, 0), ("End Concatenation Error", 0, 1, 0),
-                       ("Bilateral Concatenation Error", -1, 1, 0), ("Shift Left Fragmentation Error", -1, -1, 1), ("End Fragmentation Error", 0, -1, 0),
-                        ("Shift Right Fragmentation Error", 1, 1, 1), ("Bilateral Fragmentation Error", 1, -1, 1), ("Start Fragmentation Error", 1, 0, 0)
-                        , ("Start Fragmentation Error", 2, 0, 0)]
+        self.error_types= [
+            {
+            "Error Name": "Correct Entity Prediction",
+            "Start Offset": 0,
+            "End Offset": 0,
+            "Singleton Flag": 0
+            },
+            {
+            "Error Name": "Start Concatenation Error",
+            "Start Offset": -1,
+            "End Offset": 0,
+            "Singleton Flag": 0
+            },
+            {
+            "Error Name": "End Concatenation Error",
+            "Start Offset": 0,
+            "End Offset": 1,
+            "Singleton Flag": 0
+            },
+            {
+            "Error Name": "Bilateral Concatenation Error",
+            "Start Offset": -1,
+            "End Offset": 1,
+            "Singleton Flag": 0
+            },
+            {
+            "Error Name": "Shift Left Fragmentation Error",
+            "Start Offset": -1,
+            "End Offset": -1,
+            "Singleton Flag": 1
+            },
+            {
+            "Error Name": "End Fragmentation Error",
+            "Start Offset": 0,
+            "End Offset": -1,
+            "Singleton Flag": 1
+            },
+            {
+            "Error Name": "Shift Right Fragmentation Error",
+            "Start Offset": 1,
+            "End Offset": 1,
+            "Singleton Flag": 1
+            },
+            {
+            "Error Name": "Bilateral Fragmentation Error",
+            "Start Offset": 1,
+            "End Offset": -1,
+            "Singleton Flag": 1
+            },
+            {
+            "Error Name": "Start Fragmentation Error",
+            "Start Offset": 1,
+            "End Offset": 0,
+            "Singleton Flag": 1
+            },
+            {
+            "Error Name": "Start Fragmentation Error",
+            "Start Offset": 2,
+            "End Offset": 0,
+            "Singleton Flag": 1
+            }]
 
     #TODO Log to tsv
     def log_general(self, prediction_type: str, doc_ent: Span, ent: Span) -> None:
@@ -17,14 +73,14 @@ class ErrorLogger:
     def is_not_singleton(self, ent: Span) -> bool:
         return len(ent) != 1
 
-    def check_entity_pair(self, doc_ent: Span, ent: Span, error_tuple) -> bool:
-        if error_tuple[3] == 1:
-            if doc_ent.start == ent.start+error_tuple[1] and doc_ent.end == ent.end+error_tuple[2] and self.is_not_singleton(doc_ent):
-                self.log_general(error_tuple[0], doc_ent, ent)
+    def check_entity_pair(self, doc_ent: Span, ent: Span, error_dict) -> bool:
+        if error_dict["Singleton Flag"] == 1:
+            if doc_ent.start == ent.start+error_dict["Start Offset"] and doc_ent.end == ent.end+error_dict["End Offset"] and self.is_not_singleton(doc_ent):
+                self.log_general(error_dict["Error Name"], doc_ent, ent)
                 return True
         else:
-            if doc_ent.start == ent.start+error_tuple[1] and doc_ent.end == ent.end+error_tuple[2]:
-                self.log_general(error_tuple[0], doc_ent, ent)
+            if doc_ent.start == ent.start+error_dict["Start Offset"] and doc_ent.end == ent.end+error_dict["End Offset"]:
+                self.log_general(error_dict["Error Name"], doc_ent, ent)
                 return True
 
     def get_overlapping_entities(self, ent: Span) -> list:
@@ -35,8 +91,8 @@ class ErrorLogger:
     def log_ner_errors(self, ground_truth_spans: list) -> None:
         for idx, ent in enumerate(ground_truth_spans):
             for doc_ent in self.get_overlapping_entities(ent):
-                for error_type in self.error_types:
-                    if self.check_entity_pair(doc_ent, ent, error_type):
+                for error_type_dict in self.error_types:
+                    if self.check_entity_pair(doc_ent, ent, error_type_dict):
                         break
 
 
