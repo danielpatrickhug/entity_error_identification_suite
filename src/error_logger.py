@@ -14,14 +14,18 @@ class ErrorLogger:
             {"Name": "Bilateral Fragmentation Error", "Start Offset": 1, "End Offset": -1, "Singleton Flag": 1},
             {"Name": "Start Fragmentation Error", "Start Offset": 1, "End Offset": 0, "Singleton Flag": 0},
             {"Name": "Start Fragmentation Error", "Start Offset": 2, "End Offset": 0, "Singleton Flag": 0}]
-        self.error_list = set()
+        self.error_list = []
 
     #TODO Log to tsv
     def log_general(self, prediction_type: str, doc_ent: Span, ent: Span) -> None:
         print(f"{prediction_type} \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
-    
+
     def log_to_list(self, prediction_type: str, doc_ent: Span, ent: Span) -> str:
         return f"{prediction_type} \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}"
+
+    def filter_duplicate_logs(self) -> None:
+        for log in set(self.error_list):
+            print(log)
 
     def is_not_singleton(self, ent: Span) -> bool:
         return len(ent) != 1
@@ -33,12 +37,12 @@ class ErrorLogger:
         if prediction_dict["Singleton Flag"] == 1:
             if doc_ent.start == ent.start+prediction_dict["Start Offset"] and doc_ent.end == ent.end+prediction_dict["End Offset"] and self.is_not_singleton(doc_ent):
                 #self.log_general(prediction_dict["Name"], doc_ent, ent)
-                self.error_list.add(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
+                self.error_list.append(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
                 return True
         else:
             if doc_ent.start == ent.start+prediction_dict["Start Offset"] and doc_ent.end == ent.end+prediction_dict["End Offset"]:
                 #self.log_general(prediction_dict["Name"], doc_ent, ent)
-                self.error_list.add(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
+                self.error_list.append(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
                 return True
 
     def log_ner_errors(self, ground_truth_spans: list) -> None:
@@ -47,8 +51,7 @@ class ErrorLogger:
                 for prediction_type_dict in self.prediction_types:
                     if self.check_entity_pair(doc_ent, ent, prediction_type_dict):
                         break
-        for log in self.error_list:
-            print(log)
+        self.filter_duplicate_logs()
 
 
 
