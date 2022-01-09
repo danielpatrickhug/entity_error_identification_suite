@@ -1,64 +1,47 @@
-#from src.logger_utils import add_entity_to_doc
-
 from spacy.tokens.span import Span
 
 
 class ErrorLogger:
     def __init__(self, doc: object) -> None:
         self.doc = doc
+        # Tuple: (error_label, start_offset, end_offset, check_singleton_flag)
+        self.error_types = [("Correct Entity Prediction", 0, 0, 0),("Start Concatenation Error", -1, 0, 0), ("End Concatenation Error", 0, 1, 0),
+                       ("Bilateral Concatenation Error", -1, 1, 0), ("Shift Left Fragmentation Error", -1, 1, 1), ("End Fragmentation Error", 0, 0, 0),
+                        ("Shift Right Fragmentation Error", 1, 1, 1), ("Bilateral Fragmentation Error", 1, -1, 1)]
 
     #TODO Log to tsv
     def log_general(self, prediction_type, doc_ent: Span, ent: Span) -> None:
-        print(f"{prediction_type} Entity Prediction \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
+        print(f"{prediction_type} \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
 
-    def log_concat_error(self, concat_type, doc_ent: Span, ent: Span) -> None:
-        print(f"{concat_type} Concatenation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
+    def is_singleton(self, ent: Span) -> bool:
+        return len(ent) == 1
 
-    def log_frag_error(self, frag_type, doc_ent: Span, ent: Span) -> None:
-        print(f"{frag_type} Fragmentation Error \t {self.doc[doc_ent.start:doc_ent.end]} \t {self.doc[ent.start:ent.end]}")
+    def check_entity_pair(self, doc_ent: Span, ent: Span, start_offset, end_offset) -> bool:
+        return doc_ent.start == ent.start+start_offset and doc_ent.end == ent.end+end_offset
+
+    def get_overlapping_entities(self, ent: Span) -> list:
+        return [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
 
     #TODO break into separate classes(FragmentError, ConcatenationError)
     #TODO add DisambiguationError logger and create error class
     def log_ner_errors(self, ground_truth_spans: list) -> None:
         break_loop = False
         for idx, ent in enumerate(ground_truth_spans):
-            overlapping_spans = [doc_ent for doc_ent in self.doc.ents if doc_ent.end>= ent.start and doc_ent.start<= ent.end]
-            for doc_ent in overlapping_spans:
-                if doc_ent.start == ent.start and doc_ent.end == ent.end:
-                    self.log_general("Correct", doc_ent, ent)
-                    break_loop = True
-                    break
-                elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end:
-                    self.log_concat_error("Start", doc_ent, ent)
-                    break_loop = True
-                    break
-                elif doc_ent.start == ent.start and doc_ent.end == ent.end+1:
-                    self.log_concat_error("End", doc_ent, ent)
-                    break_loop = True
-                    break
-                elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end+1:
-                    self.log_concat_error("Bilateral", doc_ent, ent)
-                    break_loop = True
-                    break
-                elif doc_ent.start == ent.start and doc_ent.end == ent.end-1 :
-                    self.log_frag_error("End", doc_ent, ent)
-                    break_loop = True
-                    break
-                elif doc_ent.start == ent.start-1 and doc_ent.end == ent.end-1 and len(doc_ent) != 1:
-                    self.log_frag_error("Shift Left", doc_ent, ent)
-                    break_loop = True
-                    break
-                elif doc_ent.start == ent.start+1 and doc_ent.end == ent.end+1:
-                    self.log_frag_error("Shift Right", doc_ent, ent)
-                    break_loop = True
-                    break
-                elif doc_ent.start == ent.start+1 and doc_ent.end == ent.end-1 and len(doc_ent) != 1:
-                    self.log_frag_error("Contract", doc_ent, ent)
-                    break_loop = True
-                    break
+            for doc_ent in self.get_overlapping_entities(ent):
+                for error_type in self.error_types:
+                    if error_type[3] == 1:
+                        if self.check_entity_pair(doc_ent, ent, error_type[1], error_type[2]) and self.is_singleton(doc_ent):
+                            self.log_general(error_type[0], doc_ent, ent)
+                            break_loop = True
+                            break
+                    else:
+                        if self.check_entity_pair(doc_ent, ent, error_type[1], error_type[2]):
+                            self.log_general(error_type[0], doc_ent, ent)
+                            break_loop = True
+                            break
             if break_loop:
                 break_loop = False
                 continue
-            #For debugging purposes
-            #else:
-                #add_entity_to_doc(self.doc,ent)
+
+
+
