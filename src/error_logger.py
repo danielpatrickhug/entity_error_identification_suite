@@ -36,13 +36,13 @@ class ErrorLogger:
     def check_entity_pair(self, doc_ent: Span, ent: Span, prediction_dict: dict) -> bool:
         if prediction_dict["Singleton Flag"] == 1:
             if doc_ent.start == ent.start+prediction_dict["Start Offset"] and doc_ent.end == ent.end+prediction_dict["End Offset"] and self.is_not_singleton(doc_ent):
-                self.log_general(prediction_dict["Name"], doc_ent, ent)
-                #self.error_list.append(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
+                #self.log_general(prediction_dict["Name"], doc_ent, ent)
+                self.error_list.append(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
                 return True
         else:
             if doc_ent.start == ent.start+prediction_dict["Start Offset"] and doc_ent.end == ent.end+prediction_dict["End Offset"]:
-                self.log_general(prediction_dict["Name"], doc_ent, ent)
-                #self.error_list.append(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
+                #self.log_general(prediction_dict["Name"], doc_ent, ent)
+                self.error_list.append(self.log_to_list(prediction_dict["Name"], doc_ent, ent))
                 return True
 
     def log_ner_errors(self, ground_truth_spans: list) -> None:
@@ -51,7 +51,7 @@ class ErrorLogger:
                 for prediction_type_dict in self.prediction_types:
                     if self.check_entity_pair(doc_ent, ent, prediction_type_dict):
                         break
-        #self.filter_duplicate_logs()
+        self.filter_duplicate_logs() #For debugging purposes only. will add filter for TSV later
 
 
 
