@@ -9,7 +9,7 @@
     - add Spacy retraining project config library https://explosion.ai/blog/spacy-v3-project-config-systems
     - End Goal: Active learning - labeling and retraining pipeline with error logging.
     - I have a cleanup script to generate 'silver' entities on a local branch. Potential Feature.
-    - A nice to have would be a scheduling system for data labeling. i.e Schedule labeling tasks for N number of text articles for a given time         period.
+    - A nice to have would be a scheduling system for data labeling. i.e Schedule labeling tasks for N number of text articles a day for a given         time period. May allow one person to label a large dataset overtime through consistency. 
 
 ```bash
 python3.9 -m venv venv && source venv/bin/activate && pip install -U pip setuptools wheel #Use an alias
