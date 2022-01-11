@@ -5,6 +5,7 @@
 - Use en_core_web_md to see frag errors for test data
 - TODO:
     - add disambiguation error detection and logging.
+    - add spacy-transformers
     - UI to visualize text and to hand label entities by highlighting. higlighted entities get passed to ErrorIdentifier. javascript
     - add Spacy retraining project config library https://explosion.ai/blog/spacy-v3-project-config-systems
     - A nice to have would be a scheduling system for data labeling. i.e Schedule labeling tasks for N number of text articles a day for a given         time period. May allow one person to label a large dataset overtime through consistency. https://github.com/ankitects/anki
