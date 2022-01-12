@@ -3,8 +3,7 @@
 - This is a Module for detecting concatenation, fragmentation and disambiguation errors for spacy pipeline NER predictions given gold standard entities.
 - Module based off NERror: https://github.com/HindsightTechnologySolutions/NERror
 - Use en_core_web_md to see frag errors for test data
-- Opensource TODO:
-    - add disambiguation error detection and logging.
+
 
 
 ```bash
